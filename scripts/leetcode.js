@@ -36,6 +36,9 @@ let difficulty = '';
 /* state of upload for progress */
 let uploadState = { uploading: false };
 
+/* question title */
+let qtitle = '';
+
 /* Get file extension for submission */
 function findLanguage() {
   const tag = [
@@ -67,7 +70,7 @@ const upload = (
   cb = undefined,
 ) => {
   // To validate user, load user object from GitHub.
-  const URL = `https://api.github.com/repos/${hook}/contents/${directory}/${filename}`;
+  const URL = `https://api.github.com/repos/${hook}/contents/LeetCode/${difficulty}/${directory}/${filename}`;
 
   /* Define Payload */
   let data = {
@@ -137,7 +140,7 @@ const update = (
   prepend,
   cb = undefined,
 ) => {
-  const URL = `https://api.github.com/repos/${hook}/contents/${directory}/README.md`;
+  const URL = `https://api.github.com/repos/${hook}/contents/LeetCode/${difficulty}/${directory}/README.md`;
 
   /* Read from existing file on GitHub */
   const xhr = new XMLHttpRequest();
@@ -414,12 +417,12 @@ function getProblemNameSlug() {
   );
   let questionTitle = 'unknown-problem';
   if (checkElem(questionElem)) {
-    let qtitle = document.getElementsByClassName('css-v3d350');
+    qtitle = document.getElementsByClassName('css-v3d350');
     if (checkElem(qtitle)) {
       questionTitle = qtitle[0].innerHTML;
     }
   } else if (checkElem(questionDescriptionElem)) {
-    let qtitle = document.getElementsByClassName('question-title');
+    qtitle = document.getElementsByClassName('question-title');
     if (checkElem(qtitle)) {
       questionTitle = qtitle[0].innerText;
     }
@@ -455,7 +458,7 @@ function parseQuestion() {
     const qbody = questionElem[0].innerHTML;
 
     // Problem title.
-    let qtitle = document.getElementsByClassName('css-v3d350');
+    qtitle = document.getElementsByClassName('css-v3d350');
     if (checkElem(qtitle)) {
       qtitle = qtitle[0].innerHTML;
     } else {
@@ -508,7 +511,7 @@ function parseStats() {
   const spacePercentile = probStats[3].textContent;
 
   // Format commit message
-  return `Time: ${time} (${timePercentile}), Space: ${space} (${spacePercentile}) - LeetHub`;
+  return `[${difficulty}] Title: ${qtitle}, Time: ${time} (${timePercentile}), Memory: ${space} (${spacePercentile}) - LeetHub`;
 }
 
 document.addEventListener('click', (event) => {
@@ -650,13 +653,13 @@ const loader = setInterval(() => {
         /* Only create README if not already created */
         if (sha === null) {
           /* @TODO: Change this setTimeout to Promise */
-          uploadGit(
-            btoa(unescape(encodeURIComponent(probStatement))),
-            problemName,
-            'README.md',
-            readmeMsg,
-            'upload',
-          );
+          // uploadGit(
+          //   btoa(unescape(encodeURIComponent(probStatement))),
+          //   problemName,
+          //   'README.md',
+          //   readmeMsg,
+          //   'upload',
+          // );
         }
       });
 
@@ -668,13 +671,13 @@ const loader = setInterval(() => {
           if (notes != undefined && notes.length != 0) {
             console.log('Create Notes');
             // means we can upload the notes too
-            uploadGit(
-              btoa(unescape(encodeURIComponent(notes))),
-              problemName,
-              'NOTES.md',
-              createNotesMsg,
-              'upload',
-            );
+            // uploadGit(
+            //   btoa(unescape(encodeURIComponent(notes))),
+            //   problemName,
+            //   'NOTES.md',
+            //   createNotesMsg,
+            //   'upload',
+            // );
           }
         }, 500);
       }
